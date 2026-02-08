@@ -1,0 +1,51 @@
+.container2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333; /* Adjust background color as needed */
+    padding: 10px 20px; /* Adjust padding as needed */
+  }
+  
+  .link {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  
+  .logo {
+    height: 50px;
+    width: 215px;
+    /* You can apply specific styles to the logo if needed */
+  }
+  
+  .link a {
+    margin-left: 20px; /* Adjust spacing between links as needed */
+    color: #fff; /* Adjust link text color as needed */
+    text-decoration: none;
+    padding: 5px;
+    
+  }
+  
+  .link a:hover {
+    color: #000000; 
+    background-color: red; 
+   
+    border-radius: 10px;
+  }
+  
+  #Root{
+    background-color:#344853;
+    height: 100%;
+    width: 100%;
+  }
+  .r1{
+    background-color: red;
+    padding: 5px;
+    border-radius: 10px;
+  }
+  /* .r1:hover{
+  color: black;
+  } */
+  .navigate{
+    margin-left: 20px;
+  }
