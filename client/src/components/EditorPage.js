@@ -1,191 +1,3 @@
-// import React, { useEffect, useRef, useState } from "react";
-// import Client from "../components/Client";
-// import Editor from "./Editor";
-// import { initSocket } from "../Socket";
-// import { ACTIONS } from "../Actions";
-// import {
-//   useNavigate,
-//   useLocation,
-//   Navigate,
-//   useParams,
-// } from "react-router-dom";
-// import { toast } from "react-hot-toast";
-// import axios from 'axios'
-
-// function EditorPage() {
-//   const [clients, setClients] = useState([]);
-//   const [output, setOutput] = useState("");
-//   const [code, setCode] = useState(""); 
-//   const codeRef = useRef(null);
-
-//   const Location = useLocation();
-//   const navigate = useNavigate();
-//   const { roomId } = useParams();
-
-//   const socketRef = useRef(null);
-
-//   useEffect(() => {
-//     const init = async () => {
-//       const handleErrors = (err) => {
-//         console.log("Error", err);
-//         toast.error("Socket connection failed, Try again later");
-//         navigate("/");
-//       };
-
-//       socketRef.current = await initSocket();
-//       socketRef.current.on("connect_error", handleErrors);
-//       socketRef.current.on("connect_failed", handleErrors);
-
-//       socketRef.current.emit(ACTIONS.JOIN, {
-//         roomId,
-//         username: Location.state?.username,
-//       });
-
-//       socketRef.current.on(ACTIONS.JOINED, ({ clients, username, socketId }) => {
-//         if (username !== Location.state?.username) {
-//           toast.success(`${username} joined the room.`);
-//         }
-//         setClients(clients);
-//         socketRef.current.emit(ACTIONS.SYNC_CODE, {
-//           code: codeRef.current,
-//           socketId,
-//         });
-//       });
-
-//       socketRef.current.on(ACTIONS.DISCONNECTED, ({ socketId, username }) => {
-//         toast.success(`${username} left the room`);
-//         setClients((prev) => {
-//           return prev.filter((client) => client.socketId !== socketId);
-//         });
-//       });
-
-//       // Listen for code execution results
-//       socketRef.current.on(ACTIONS.CODE_EXECUTED, ({ output }) => {
-//         console.log("Code executed, output received:", output);
-//         setOutput(output);
-//       });
-//     };
-//     init();
-
-//     return () => {
-//       socketRef.current && socketRef.current.disconnect();
-//       socketRef.current.off(ACTIONS.JOINED);
-//       socketRef.current.off(ACTIONS.DISCONNECTED);
-//       socketRef.current.off(ACTIONS.CODE_EXECUTED);
-//     };
-//   }, []);
-
-//   if (!Location.state) {
-//     return <Navigate to="/" />;
-//   }
-
-//   const copyRoomId = async () => {
-//     try {
-//       await navigator.clipboard.writeText(roomId);
-//       toast.success(`Room ID copied.`);
-//     } catch (error) {
-//       console.log(error);
-//       toast.error("Unable to copy the Room ID.");
-//     }
-//   };
-
-//   const leaveRoom = async () => {
-//     navigate("/");
-//   };
-
-//   // Function to execute the code
-//   const executeCode = () => {
-//     try {
-//       let capturedOutput = ''; // Variable to capture the output
-//       const originalLog = console.log; // Save the original console.log function
-
-//       // Override console.log to capture the output
-//       console.log = (...args) => {
-//         capturedOutput += args.join(' ') + '\n';
-//       };
-
-//       // Execute the code using eval
-//       eval(code);
-
-//       // Restore the original console.log function
-//       console.log = originalLog;
-
-//       // Update the output state with the captured output
-//       setOutput(capturedOutput);
-//     } catch (error) {
-//       // Set error message if execution fails
-//       setOutput(`Error: ${error.message}\n`);
-//     }
-//   };
-
-//   // Function to handle code change
-//   const handleCodeChange = (code) => {
-//     setCode(codeRef.current = code)
-//   };
-
-//   return (
-//     <div className="container-fluid vh-100">
-//       <div className="row h-100">
-//         <div
-//           className="col-md-2 bg-dark text-light d-flex flex-column h-100"
-//           style={{ boxShadow: "2px 0px 4px rgba(0, 0, 0, 0.1)" }}
-//         >
-//           <img
-//             src="/images/codecast.png"
-//             alt="Logo"
-//             className="img-fluid mx-auto"
-//             style={{ maxWidth: "150px", marginTop: "-43px" }}
-//           />
-//           <hr style={{ marginTop: "-3rem" }} />
-
-//           <div className="d-flex flex-column flex-grow-1 overflow-auto">
-//             <span className="mb-2">Members</span>
-//             {clients.map((client) => (
-//               <Client key={client.socketId} username={client.username} />
-//             ))}
-//           </div>
-
-//           <hr />
-//           <div className="mt-auto ">
-//             <button className="btn btn-success" onClick={copyRoomId}>
-//               Copy Room ID
-//             </button>
-//             <button
-//               className="btn btn-danger mt-2 mb-2 px-3 btn-block"
-//               onClick={leaveRoom}
-//             >
-//               Leave Room
-//             </button>
-//           </div>
-//         </div>
-
-//         <div className="col-md-10 text-light d-flex flex-column h-100 ">
-//           <Editor
-//             socketRef={socketRef}
-//             roomId={roomId}
-//             onCodeChange={handleCodeChange}
-//           />
-//           <button
-//             className="btn btn-primary mt-2 mb-2 px-3 btn-block"
-//             onClick={executeCode}
-//           >
-//             Execute Code
-//           </button>
-//           <div className="mt-3">
-//             <h4>Output:<pre>{output}</pre></h4>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default EditorPage;
-
-
-
-
-
 import React, { useEffect, useRef, useState } from "react";
 import Client from "../components/Client";
 import Editor from "./Editor";
@@ -200,12 +12,14 @@ import {
 import { toast } from "react-hot-toast";
 import axios from 'axios';
 import Sk from "skulpt";
+import './EditorPage.css';
 
 function EditorPage() {
   const [clients, setClients] = useState([]);
   const [output, setOutput] = useState("");
   const [code, setCode] = useState("");
-  const [language, setLanguage] = useState("javascript"); // State to track the selected language
+  const [language, setLanguage] = useState("javascript");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const codeRef = useRef(null);
 
   const Location = useLocation();
@@ -228,12 +42,12 @@ function EditorPage() {
 
       socketRef.current.emit(ACTIONS.JOIN, {
         roomId,
-        username: Location.state?.username,
+        username: Location.state?.username || `User_${Math.floor(Math.random() * 1000)}`,
       });
 
       socketRef.current.on(ACTIONS.JOINED, ({ clients, username, socketId }) => {
         if (username !== Location.state?.username) {
-          toast.success(`${username} joined the room.`);
+          toast.success(`${username} joined.`);
         }
         setClients(clients);
         socketRef.current.emit(ACTIONS.SYNC_CODE, {
@@ -243,15 +57,13 @@ function EditorPage() {
       });
 
       socketRef.current.on(ACTIONS.DISCONNECTED, ({ socketId, username }) => {
-        toast.success(`${username} left the room`);
+        toast.success(`${username} left`);
         setClients((prev) => {
           return prev.filter((client) => client.socketId !== socketId);
         });
       });
 
-      // Listen for code execution results
       socketRef.current.on(ACTIONS.CODE_EXECUTED, ({ output }) => {
-        console.log("Code executed, output received:", output);
         setOutput(output);
       });
     };
@@ -265,166 +77,218 @@ function EditorPage() {
     };
   }, []);
 
-  if (!Location.state) {
-    return <Navigate to="/" />;
-  }
-
   const copyRoomId = async () => {
     try {
       await navigator.clipboard.writeText(roomId);
-      toast.success(`Room ID copied.`);
+      toast.success(`Room ID copied!`);
     } catch (error) {
-      console.log(error);
-      toast.error("Unable to copy the Room ID.");
+      toast.error("Unable to copy Room ID.");
     }
   };
 
-  const leaveRoom = async () => {
+  const leaveRoom = () => {
     navigate("/");
   };
 
-  // Function to execute the code
   const executeCode = () => {
-    console.log("Selected language:", language); // Log the selected language
+    setOutput(""); 
     try {
-      let capturedOutput = ''; // Variable to capture the output
-      const originalLog = console.log; // Save the original console.log function
+      let capturedOutput = '';
+      const originalLog = console.log;
+      const originalError = console.error;
+      const originalWarn = console.warn;
 
       console.log = (...args) => {
         capturedOutput += args.join(' ') + '\n';
       };
+      console.error = (...args) => {
+        capturedOutput += 'Error: ' + args.join(' ') + '\n';
+      };
+      console.warn = (...args) => {
+        capturedOutput += 'Warning: ' + args.join(' ') + '\n';
+      };
 
       if (language === 'javascript') {
-        eval(code);
+        try {
+          const runner = new Function('console', code);
+          runner({ 
+            log: console.log, 
+            error: console.error, 
+            warn: console.warn 
+          });
+        } catch (e) {
+          capturedOutput += `Runtime Error: ${e.message}\n`;
+        }
       } else if (language === 'python') {
-        Sk.configure({ output: (text) => (capturedOutput += text + '\n') });
+        Sk.configure({ 
+          output: (text) => (capturedOutput += text),
+          read: (x) => {
+            if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
+              throw "File not found: '" + x + "'";
+            return Sk.builtinFiles["files"][x];
+          }
+        });
         Sk.importMainWithBody('<stdin>', false, code, true);
       }
 
       console.log = originalLog;
+      console.error = originalError;
+      console.warn = originalWarn;
 
-      setOutput(capturedOutput);
+      setOutput(capturedOutput || "> Code executed (no output to console)");
     } catch (error) {
-      setOutput(`Error: ${error.message}\n`);
+      setOutput(`Execution Error: ${error.message}\n`);
     }
   };
 
-  // Function to handle code change
   const handleCodeChange = (code) => {
-    setCode(codeRef.current = code)
+    setCode(codeRef.current = code);
   };
 
-  // Function to save the code
   const saveCode = async () => {
     try {
       const response = await axios.post('/saveCoderoom', { code, roomId, language });
-
       if (response.data.success) {
-        alert('Code saved successfully!');
+        toast.success('Code saved!');
       } else {
-        alert('Failed to save code');
+        toast.error('Failed to save');
       }
     } catch (error) {
-      console.error(error);
-      toast.error('Failed to save code.');
+      toast.error('Save error.');
     }
   };
 
-  const savechat = async () => {
-    alert('Ai saved successfully!');
-  };
-
   return (
-    <div className="container-fluid ">
-      <div className="row h-100">
-        {/* Left panel */}
-        <div
-          className="col-md-2 bg-dark text-light d-flex flex-column h-70"
-          style={{ boxShadow: "2px 0px 4px rgba(0, 0, 0, 0.1)" }}
-        >
-          
-          <div className="d-flex flex-column flex-grow-1 overflow-auto">
-            <span style={{marginTop:"10px"}}>Members</span>
-            <hr style={{ marginTop: "1rem" }} />
+    <div className="editor-page-container">
+      {/* Sidebar Overlay for Mobile */}
+      <div 
+        className={`sidebar-overlay ${isSidebarOpen ? 'show' : ''}`} 
+        onClick={() => setIsSidebarOpen(false)}
+      ></div>
+
+      {/* Sidebar - Refined Alignment, No Duplicate Logo */}
+      <aside className={`sidebar ${isSidebarOpen ? 'show' : ''}`}>
+        <div className="sidebar-header-section">
+          <p className="sidebar-description">
+            Collaborative real-time workspace.
+          </p>
+        </div>
+
+        <div className="session-card">
+          <span className="session-card-title">Join Code</span>
+          <div className="session-url-container">
+            <input 
+              readOnly 
+              className="session-url-input" 
+              value={roomId} 
+            />
+            <button className="btn-icon-session" onClick={copyRoomId} title="Copy Room ID">
+              Copy
+            </button>
+          </div>
+        </div>
+
+        <div className="collaborators-section">
+          <div className="collaborators-header">
+            <span>Room Members</span>
+            <span className="count-badge">{clients.length}</span>
+          </div>
+          <div className="collaborators-list">
             {clients.map((client) => (
-              <Client key={client.socketId} username={client.username} />
+              <div key={client.socketId} className="collaborator-item">
+                <div className="avatar">
+                  {client.username.charAt(0).toUpperCase()}
+                </div>
+                <div className="collaborator-info">
+                  <span className="collaborator-name">
+                    {client.username} {client.username === Location.state?.username ? '(You)' : ''}
+                  </span>
+                </div>
+                <div className="status-dot"></div>
+              </div>
             ))}
           </div>
-          <hr />
-          <div  className="d-flex mt-auto ">
+        </div>
+
+        <div className="sidebar-footer">
+          <button 
+            className="btn-leave" 
+            onClick={leaveRoom}
+          >
+            Leave Room
+          </button>
+        </div>
+      </aside>
+
+      {/* Main Area */}
+      <main className="main-editor-area">
+        <header className="editor-toolbar">
+          <div className="toolbar-left">
             <button 
-            style={{fontSize:"15px", height:"50px", width:"100px"}}
-            className="btn btn-success mt-1" 
-            onClick={copyRoomId}>
-              Copy Room ID
+              className="btn-mobile-sidebar-toggle" 
+              onClick={() => setIsSidebarOpen(true)}
+            >
+              ☰
             </button>
-            <button
-              style={{fontSize:"15px", height:"50px", width:"100px", margin:"5px"}}
-              className="btn btn-danger ml-2 mb-2 px-3 btn-block"
-              onClick={leaveRoom}>
-              Leave Room
+            <div className="lang-indicator">
+              <select
+                className="lang-select-premium"
+                value={language}
+                onChange={(e) => setLanguage(e.target.value)}
+              >
+                <option value="javascript">JS</option>
+                <option value="python">PY</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="toolbar-right">
+            <button className="btn-action btn-save-minimal" onClick={saveCode}>
+              Save
             </button>
+            <button className="btn-action btn-run-premium" onClick={executeCode}>
+              Run Code
+            </button>
+          </div>
+        </header>
+
+        <div className="editor-workspace">
+          <div className="code-pane">
+            <Editor
+              socketRef={socketRef}
+              roomId={roomId}
+              onCodeChange={handleCodeChange}
+            />
+          </div>
+          
+          <div className="console-pane">
+            <div className="console-header">
+              <span className="console-title">Output</span>
+              <button 
+                className="btn-console-clear" 
+                onClick={() => setOutput("")}
+              >
+                Clear
+              </button>
+            </div>
+            <div className="console-body">
+              {output || "> Ready to execute..."}
+            </div>
           </div>
         </div>
 
-        {/* Right panel */}
-        <div className="col-md-10 text-light d-flex flex-column h-100">
-          {/* Editor */}
-          <div style={{ display: 'flex', height: '90vh' }}>
-            <div style={{ flex: 3, margin:"2px" }}>
-              <Editor
-                socketRef={socketRef}
-                roomId={roomId}
-                onCodeChange={handleCodeChange}
-              />
-              {/* Action buttons */}
-              <div className="d-flex align-items-center mt-2">
-                <select
-                  value={language}
-                  onChange={(e) => setLanguage(e.target.value)}
-                >
-                  <option value="javascript">JavaScript</option>
-                  <option value="python">Python</option>
-                </select>
-                <button
-                  className="btn btn-primary mr-2 px-3"
-                  onClick={executeCode}
-                  style={{margin:"0% 8%"}}
-                >
-                  Execute Code
-                </button>
-                <button
-                  className="btn btn-success mr-2 px-3"
-                  onClick={saveCode}
-                >
-                  Save Code
-                </button>
-                <button
-                  className="ai btn btn-primary mt-2 mb-2 px-5 btn-block"
-                  onClick={savechat}
-                >
-                  Chat With AI
-                </button>
-              </div>
-            </div>
-            {/* Output */}
-            <div style={{ flex: 1, overflowY: 'auto', height: '91.3%', backgroundColor: "#2d2f3b", margin: "2px 0px 0px 5px"}}>
-              <h4 style={{marginLeft:"10px"}}>Output:</h4>
-              <pre style={{ whiteSpace: 'pre-wrap',marginLeft:"10px" }}>{output}</pre>
-            </div>
+        <footer className="editor-status-bar">
+          <div className="status-left">
+            <span>Room {roomId}</span>
           </div>
-        </div>
-      </div>
+          <div className="status-right">
+            <span>UTF-8</span>
+            <span>JS / Node</span>
+          </div>
+        </footer>
+      </main>
     </div>
   );
 }
 
 export default EditorPage;
-
-
-
-
-
-
-
-

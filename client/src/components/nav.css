@@ -1,51 +1,95 @@
-.container2 {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #333; /* Adjust background color as needed */
-    padding: 10px 20px; /* Adjust padding as needed */
+/* Navbar - Premium Glassmorphism */
+.navbar-container {
+  height: 60px;
+  background: var(--bg-sidebar);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.nav-content {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.logo-section:hover {
+  opacity: 0.8;
+}
+
+.logo-icon {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--primary);
+  background: rgba(249, 115, 22, 0.1);
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.4rem;
+  box-shadow: 0 0 15px rgba(249, 115, 22, 0.2);
+}
+
+.logo-text {
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--text-main);
+  background: linear-gradient(135deg, #fff 0%, #aaa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav-btn {
+  background: transparent;
+  color: var(--text-muted);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 700;
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid transparent;
+}
+
+.nav-btn:hover {
+  color: var(--text-main);
+  background: var(--hover-bg);
+}
+
+.nav-btn.active {
+  background: var(--bg-card);
+  color: var(--primary);
+  border-color: var(--border);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Mobile Toggle */
+@media (max-width: 768px) {
+  .nav-content {
+    padding: 0 1.5rem; /* Increased padding */
   }
-  
-  .link {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
+  .logo-text {
+    font-size: 1.1rem;
   }
-  
-  .logo {
-    height: 50px;
-    width: 215px;
-    /* You can apply specific styles to the logo if needed */
-  }
-  
-  .link a {
-    margin-left: 20px; /* Adjust spacing between links as needed */
-    color: #fff; /* Adjust link text color as needed */
-    text-decoration: none;
-    padding: 5px;
-    
-  }
-  
-  .link a:hover {
-    color: #000000; 
-    background-color: red; 
-   
-    border-radius: 10px;
-  }
-  
-  #Root{
-    background-color:#344853;
-    height: 100%;
-    width: 100%;
-  }
-  .r1{
-    background-color: red;
-    padding: 5px;
-    border-radius: 10px;
-  }
-  /* .r1:hover{
-  color: black;
-  } */
-  .navigate{
-    margin-left: 20px;
-  }
+}

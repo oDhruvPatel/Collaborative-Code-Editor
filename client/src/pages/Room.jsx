@@ -1,43 +1,32 @@
 import React, { useState } from "react";
-import { v4 as uuid } from "uuid";
-import toast from "react-hot-toast";
+import { v4 as uuidv4 } from "uuid";
+import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import axios from "axios"; // Assuming you're using axios for HTTP requests
-import './room.css'
 
 function Room() {
+  const navigate = useNavigate();
   const [roomId, setRoomId] = useState("");
   const [username, setUsername] = useState("");
-  const [password, setPassword] = useState(""); // New state for password
-
-  const navigate = useNavigate();
 
   const generateRoomId = (e) => {
     e.preventDefault();
-    const Id = uuid();
-    setRoomId(Id);
-    toast.success("Room Id is generated");
+    const id = uuidv4();
+    setRoomId(id);
+    toast.success("New Room ID generated!");
   };
 
-  const joinRoom = async () => {
-
-    
-    if (!roomId || !username || !password) {
-      toast.error("All fields are required");
+  const joinRoom = () => {
+    if (!roomId || !username) {
+      toast.error("Room ID & Username are required");
       return;
     }
-    
-    
 
-    try {
-      
-      await axios.post("/room", { roomId, username, password });
-      navigate(`/editor/${roomId}`, { state: { username } });
-      toast.success("Room created successfully");
-    } catch (error) {
-      console.error("Error creating room:", error);
-      toast.error("Error creating room. Please try again later.");
-    }
+    // Redirect to editor
+    navigate(`/editor/${roomId}`, {
+      state: {
+        username,
+      },
+    });
   };
 
   const handleInputEnter = (e) => {
@@ -47,72 +36,58 @@ function Room() {
   };
 
   return (
-    <div>
-    <div className="container1">
-      <div className='inner'>
-        {/* <div className="field"> */}
-        
-              <div className="head">
-              <img
-                src="/images/codecast.png"
-                alt="Logo"
-                
-                style={{ maxWidth: "200px" , height: "50px"}}
-              />
-              <h4 style={{alignContent:"center", marginTop:"20px"}}>Room Create or Join</h4>
-              </div>
-              <label className="label">Room ID</label>
-                <input
-                  type="text"
-                  value={roomId}
-                  className="input"
-                  onChange={(e) => setRoomId(e.target.value)}
-                  placeholder="ROOM ID"
-                  onKeyUp={handleInputEnter}
-                />
-             <label className="label">Username</label>
-                <input
-                  type="text"
-                  value={username}
-                  className="input"
-                  onChange={(e) => setUsername(e.target.value)}
-                  placeholder="USERNAME"
-                  onKeyUp={handleInputEnter}
-                />
-             <label className="label">Password</label>
-                <input
-                  type="password"
-                  value={password}
-                  className="input"
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="PASSWORD" // Password field
-                  onKeyUp={handleInputEnter}
-                />
-              
-              
-              <button
-                onClick={joinRoom}
-                className="button1"
-              >
-                JOIN
-              </button>
-              <p>
-                Don't have a room ID? create{" "}
-                <span
-                  onClick={generateRoomId}
-                  style={{ cursor: "pointer",color:"green",}}
-                >
-                  {" "}
-                  Room ID
-                </span>
-              </p>
-              
-            </div>
-            </div>
+    <div className="join-container">
+      <div className="join-glass-card">
+        <div className="join-header">
+          <div className="join-logo">
+            <span className="logo-icon-accent">&lt;/&gt;</span>
+            <span className="logo-text-accent">CodeCast</span>
           </div>
+          <h1 className="join-title">Collaborate in Real-Time</h1>
+          <p className="join-subtitle">Enter a session ID or create a new room to start coding together.</p>
+        </div>
+
+        <div className="join-form">
+          <div className="premium-input-group">
+            <label className="input-label">Session ID</label>
+            <input
+              type="text"
+              placeholder="Paste invitation code..."
+              className="premium-input"
+              onChange={(e) => setRoomId(e.target.value)}
+              value={roomId}
+              onKeyUp={handleInputEnter}
+              required
+            />
+          </div>
+
+          <div className="premium-input-group">
+            <label className="input-label">Display Name</label>
+            <input
+              type="text"
+              placeholder="How should others see you?"
+              className="premium-input"
+              onChange={(e) => setUsername(e.target.value)}
+              value={username}
+              onKeyUp={handleInputEnter}
+              required
+            />
+          </div>
+
+          <button className="btn-join-primary" onClick={joinRoom}>
+            Join Session
+          </button>
+
+          <div className="join-footer">
+            <span>Don't have a session ID?</span>
+            <button onClick={generateRoomId} className="btn-link-action">
+              Generate New ID
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
 export default Room;
-
-

@@ -1,0 +1,414 @@
+/* Editor Page Container - High Fidelity Redesign */
+.editor-page-container {
+  display: flex;
+  height: calc(100vh - 60px);
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  overflow: hidden;
+}
+
+/* Sidebar Styling - Integrated tool pane feel */
+.sidebar {
+  width: 260px;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem;
+  gap: 1.5rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1001; /* Above mobile overlay */
+}
+
+.sidebar-header-section {
+  padding-bottom: 0.5rem;
+}
+
+.sidebar-description {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Session Selection Card */
+.session-card {
+  background: var(--bg-card);
+  border-radius: 0.6rem;
+  border: 1px solid var(--border);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.session-card-title {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.session-url-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.session-url-input {
+  box-sizing: border-box;
+  flex: 1;
+  min-width: 0;
+  background: var(--bg-dark);
+  border: 1px solid var(--border);
+  border-radius: 0.35rem;
+  padding: 0.45rem 0.6rem;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-family: 'Fira Code', monospace;
+  pointer-events: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.btn-icon-session {
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 0.35rem;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-icon-session:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+/* Collaborators Management */
+.collaborators-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.collaborators-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.count-badge {
+  background: rgba(249, 115, 22, 0.1);
+  color: var(--primary);
+  padding: 0.1rem 0.4rem;
+  border-radius: 0.35rem;
+  font-size: 0.7rem;
+}
+
+.collaborator-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+}
+
+.avatar {
+  width: 28px;
+  height: 28px;
+  background: var(--primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.75rem;
+  color: white;
+  box-shadow: 0 0 10px rgba(249, 115, 22, 0.3);
+}
+
+.collaborator-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--accent-green);
+  border-radius: 50%;
+  margin-left: auto;
+  box-shadow: 0 0 6px var(--accent-green);
+}
+
+.sidebar-footer {
+  margin-top: auto;
+}
+
+.btn-leave {
+  width: 100%;
+  padding: 0.75rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  border-radius: 0.5rem;
+  font-weight: 700;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-leave:hover {
+  background: rgba(241, 76, 76, 0.1);
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
+/* Main Workspace Core */
+.main-editor-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-dark);
+  overflow: hidden;
+}
+
+.editor-toolbar {
+  height: 48px;
+  background-color: var(--bg-sidebar);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1.25rem;
+  z-index: 30;
+}
+
+.toolbar-left, .toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.lang-indicator select {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-main);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-action {
+  padding: 0.4rem 1.2rem;
+  border-radius: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+}
+
+.btn-save-minimal {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+}
+
+.btn-save-minimal:hover {
+  background: var(--hover-bg);
+  color: var(--text-main);
+  border-color: var(--text-muted);
+}
+
+.btn-run-premium {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.2);
+}
+
+.btn-run-premium:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 15px rgba(249, 115, 22, 0.3);
+}
+
+/* Tab & Search Pane Layout */
+.editor-workspace {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.code-pane {
+  flex: 1;
+  overflow: hidden;
+  background: #272727; /* User requested background */
+}
+
+/* Console Section - Polished & CLI Feel */
+.console-pane {
+  background: #0d0d0d;
+  border-top: 1px solid var(--border);
+  height: 220px;
+  display: flex;
+  flex-direction: column;
+  transition: height 0.3s ease;
+}
+
+.console-header {
+  height: 32px;
+  background: #151515;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+}
+
+.console-title {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.btn-console-clear {
+  color: #555;
+  font-size: 0.65rem;
+  font-weight: 700;
+  cursor: pointer;
+  background: transparent;
+}
+
+.btn-console-clear:hover {
+  color: var(--text-muted);
+}
+
+.console-body {
+  flex: 1;
+  padding: 1rem;
+  font-family: 'Fira Code', 'Roboto Mono', monospace;
+  font-size: 0.85rem;
+  color: #aaa;
+  overflow-y: auto;
+  line-height: 1.5;
+  word-break: break-all;
+}
+
+/* Footer Status Strip */
+.editor-status-bar {
+  height: 22px;
+  background-color: var(--primary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: white;
+}
+
+.status-left, .status-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* Mobile Specific Refinements */
+.btn-mobile-sidebar-toggle {
+  display: none;
+  background: var(--bg-card);
+  color: var(--primary);
+  border: 1px solid var(--border);
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.4rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-mobile-sidebar-toggle:hover {
+  background: var(--hover-bg);
+  box-shadow: 0 0 10px var(--primary-glow);
+}
+
+@media (max-width: 1024px) {
+  .sidebar {
+    position: fixed;
+    height: 100vh;
+    top: 0;
+    left: -300px;
+    width: 280px;
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
+  }
+  .sidebar.show {
+    left: 0;
+  }
+  
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
+  
+  .sidebar-overlay.show {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .btn-mobile-sidebar-toggle {
+    display: block;
+    margin-right: 0.5rem;
+  }
+  
+  .editor-toolbar {
+    padding: 0 0.75rem;
+  }
+  
+  .console-pane {
+    height: 160px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+    width: 80%;
+    left: -100%;
+  }
+  .sidebar.show {
+    left: 0;
+  }
+  
+  .btn-action {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.7rem;
+  }
+  
+  .toolbar-right {
+    gap: 0.4rem;
+  }
+}

@@ -1,30 +1,28 @@
-import React from 'react'
-import {Link} from 'react-router-dom'
-import './nav.css'
+import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import './nav.css';
 
 export default function Navbar() {
+  const location = useLocation();
+
   return (
-    
-    <div className='container2'>
-    <nav>
-    <div className='link'>
-        <div className='logo'>
-        <img src="/images/codecast.png" alt="Logo" />
+    <header className="navbar-container">
+      <nav className="nav-content">
+        <Link to="/" className="logo-section">
+          <span className="logo-icon">&lt;/&gt;</span>
+          <span className="logo-text">CodeCast</span>
+        </Link>
+
+        {/* Action Buttons */}
+        <div className="nav-actions">
+          <Link
+            to="/room"
+            className={`nav-btn ${location.pathname === '/room' ? 'active' : ''}`}
+          >
+            Join Room
+          </Link>
         </div>
-        <div className='navigate'>
-        <Link className="l1" to='/home'>Home</Link>
-        <Link className="l1" to='/register'>Register</Link>
-        <Link className="l1" to='/login'>Login</Link>
-        <Link className="l1 r1" to='/room'>Room</Link>
-        </div>
-        
-    </div>
-    </nav>
-    </div>
-    
-  )
+      </nav>
+    </header>
+  );
 }
-
-
-
-
