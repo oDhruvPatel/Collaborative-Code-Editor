@@ -19,31 +19,36 @@ const io = new Server(server, {
 });
 
 const userSocketMap = {};
-const getAllConnectedClients = (roomId) => {
-  return Array.from(io.sockets.adapter.rooms.get(roomId) || []).map(
-    (socketId) => {
-      return {
-        socketId,
-        username: userSocketMap[socketId],
-      };
-    }
-  );
+const getAllConnectedClients = async (roomId) => {
+  const sockets = await io.in(roomId).fetchSockets();
+  return sockets.map((socket) => {
+    return {
+      socketId: socket.id,
+      username: userSocketMap[socket.id],
+    };
+  });
 };
 
 io.on("connection", (socket) => {
   // console.log('Socket connected', socket.id);
-  socket.on(ACTIONS.JOIN, ({ roomId, username }) => {
+  socket.on(ACTIONS.JOIN, async ({ roomId, username }) => {
+    console.log(`User ${username} joining room ${roomId}`);
     userSocketMap[socket.id] = username;
     socket.join(roomId);
-    const clients = getAllConnectedClients(roomId);
-    // notify that new user join
-    clients.forEach(({ socketId }) => {
-      io.to(socketId).emit(ACTIONS.JOINED, {
-        clients,
-        username,
-        socketId: socket.id,
+    
+    // Tiny delay to ensure join is registered in adapter
+    setTimeout(async () => {
+      const clients = await getAllConnectedClients(roomId);
+      console.log(`Current clients in ${roomId}:`, clients);
+      
+      clients.forEach(({ socketId }) => {
+        io.to(socketId).emit(ACTIONS.JOINED, {
+          clients,
+          username,
+          socketId: socket.id,
+        });
       });
-    });
+    }, 50);
   });
 
   // sync the code
