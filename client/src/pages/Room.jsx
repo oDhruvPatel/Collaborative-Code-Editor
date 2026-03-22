@@ -54,7 +54,7 @@ function Room() {
               type="text"
               placeholder="Paste invitation code..."
               className="premium-input"
-              onChange={(e) => setRoomId(e.target.value)}
+              onChange={(e) => setRoomId(e.target.value.trim())}
               value={roomId}
               onKeyUp={handleInputEnter}
               required
