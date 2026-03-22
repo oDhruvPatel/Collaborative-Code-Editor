@@ -1,7 +1,7 @@
 import './App.css';
 import { Routes, Route, Navigate } from "react-router-dom";
 import Room from './pages/Room';
-import Navbar from '../src/components/Navbar';
+import Navbar from './components/Navbar';
 import axios from 'axios';
 import EditorPage from './components/EditorPage';
 import { Toaster } from 'react-hot-toast';
